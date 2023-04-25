@@ -21,7 +21,24 @@ df["Gruppe"] = np.nan
 df["Rollen"] = np.where(df["Rollen"] == "Teilnehmer/-in", "TN",
                        np.where(df["Rollen"].isin(["Klassenlehrer*in", "Kurshelfer*in", "Kursleiter*in"]), "Leiter", df["Rollen"]))
 
+# Liste von Teilnehmer und Leiter erstellen
+teilnehmer = df[df["Rollen"] == "TN"]
+leiter = df[df["Rollen"] == "Leiter"]
 
-teilnehmende = df[df["Rollen"] == "TN"]
-leitende = df[df['Rollen'] == 'Leiter']
+# Anzahl von Leitern
+anzahl_leiter = leiter.shape[0]
 
+# Gruppieren und Zählen der Anzahl von Personen in jeder Gruppe
+max_personen_Adresse = teilnehmer.groupby("Adresse").size().max()
+max_personen_Ort = teilnehmer.groupby("Ort").size().max()
+max_personen_Hauptebene = teilnehmer.groupby("Hauptebene").size().max()
+max_personen_Kantonalverband = teilnehmer.groupby("Kantonalverband").size().max()
+
+# Ausgabe der maximalen Anzahl von Personen mit gleichem Ort
+print("Maximale Anzahl von Personen mit gleicher Adresse:", max_personen_Adresse)
+print("Maximale Anzahl von Personen mit gleichem Ort:", max_personen_Ort)
+print("Maximale Anzahl von Personen mit gleicher Hauptebene:", max_personen_Hauptebene)
+print("Maximale Anzahl von Personen mit gleichem Kantonalverband:", max_personen_Kantonalverband)
+
+# Ausgabe der Anzahl Leiter (Gruppen)
+print("Anzahl von Leitern:", anzahl_leiter)

@@ -14,6 +14,14 @@ df = pd.read_excel(file_path)
 columns_to_keep = ["Vorname", "Nachname", "Pfadiname", "Adresse", "Ort", "Hauptebene", "Rollen", "Anrede", "Kantonalverband"]  # List of columns to keep
 df = df[columns_to_keep]
 
+# Neue Spalte "Gruppe" erstellen
+df["Gruppe"] = np.nan
 
-teilnehmende = df[df["Rollen"] == "Teilnehmer/-in"]
-leitende = df[(df['Rollen'] == 'Klassenlehrer*in') | (df['Rollen'] == 'Kurshelfer*in') | (df['Rollen'] == 'Kursleiter*in')]
+# Aktualisieren der Werte in der Spalte "Rollen"
+df["Rollen"] = np.where(df["Rollen"] == "Teilnehmer/-in", "TN",
+                       np.where(df["Rollen"].isin(["Klassenlehrer*in", "Kurshelfer*in", "Kursleiter*in"]), "Leiter", df["Rollen"]))
+
+
+teilnehmende = df[df["Rollen"] == "TN"]
+leitende = df[df['Rollen'] == 'Leiter']
+

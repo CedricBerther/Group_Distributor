@@ -1,17 +1,19 @@
 import pandas as pd
+import numpy as np
+import os
 
+# Den Pfad der Python-Datei erhalten
+script_path = os.path.abspath(__file__)
+
+# Das Verzeichnis der Python-Datei als Arbeitsverzeichnis festlegen
+os.chdir(os.path.dirname(script_path))
+
+# Read the Excel file into a DataFrame
 file_path = "event_participation_export.xlsx"
 df = pd.read_excel(file_path)
-
-# Split the data into two groups: leaders and participant
-leaders = df[(df['Rollen'] == 'Klassenlehrer*in') | (df['Rollen'] == 'Kurshelfer*in') | (df['Rollen'] == 'Kursleiter*in')]  
-participant = df[df['Rollen'] == 'Teilnehmer/-in']  
+columns_to_keep = ["Vorname", "Nachname", "Pfadiname", "Adresse", "Ort", "Hauptebene", "Rollen", "Anrede", "Kantonalverband"]  # List of columns to keep
+df = df[columns_to_keep]
 
 
-# Get the number of persons in both groups
-num_leaders = len(leaders)
-num_participant = len(participant)
-
-# Print the number of persons in both group
-print("Number of persons in leaders group: ", num_leaders)
-print("Number of persons in participant group: ", num_participant)
+teilnehmende = df[df["Rollen"] == "Teilnehmer/-in"]
+leitende = df[(df['Rollen'] == 'Klassenlehrer*in') | (df['Rollen'] == 'Kurshelfer*in') | (df['Rollen'] == 'Kursleiter*in')]
